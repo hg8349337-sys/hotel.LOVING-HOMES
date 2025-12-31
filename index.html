@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loving Homes | الفخامة والخصوصية</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+         :root {
+            --gold: #C5A059;
+            --black: #0B0B0B;
+            --white: #FFFFFF;
+            --cream: #F9F7F4;
+            --danger: #e74c3c;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+        }
+        
+        body {
+            background: var(--cream);
+            overflow-x: hidden;
+            color: var(--black);
+            line-height: 1.6;
+        }
+        /* Navigation */
+        
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 18px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: var(--white);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--gold);
+            cursor: pointer;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--black);
+            margin: 0 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--gold);
+        }
+        /* Page System */
+        
+        .page {
+            display: none;
+            padding-top: 100px;
+            min-height: 100vh;
+            animation: slideIn 0.6s ease-out;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .btn-gold {
+            background: var(--gold);
+            color: white;
+            padding: 14px 35px;
+            border: none;
+            font-weight: 900;
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 4px;
+            display: inline-block;
+            text-decoration: none;
+        }
+        
+        .btn-gold:hover {
+            background: var(--black);
+            transform: translateY(-3px);
+        }
+        /* Hero */
+        
+        .hero {
+            height: 80vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200') center/cover;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+        }
+        /* Cards & Grid */
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .offer-card {
+            background: var(--white);
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            margin-bottom: 40px;
+            border: 2px dashed var(--gold);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        }
+        
+        .offer-img {
+            width: 40%;
+            object-fit: cover;
+        }
+        
+        .offer-content {
+            padding: 40px;
+            flex: 1;
+        }
+        
+        .offer-tag {
+            background: var(--danger);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        /* Contact Wrapper */
+        
+        .contact-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        }
+        
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            outline: none;
+        }
+        /* Modals (Payment & Privacy) */
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        
+        .modal-card {
+            background: white;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 20px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="logo" onclick="showPage('home')">LOVING HOMES</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')" id="lnk-home" class="active">الرئيسية</a>
+            <a onclick="showPage('rooms')" id="lnk-rooms">الغرف والأجنحة</a>
+            <a onclick="showPage('amenities')" id="lnk-amenities">المرافق</a>
+            <a onclick="showPage('offers')" id="lnk-offers" style="color: var(--danger);"><i class="fas fa-fire"></i> عروض حصرية</a>
+            <a onclick="showPage('contact')" id="lnk-contact">تواصل معنا</a>
+        </div>
+    </nav>
+
+    <div id="home" class="page active">
+        <section class="hero">
+            <h1 style="font-size: 4rem; font-family: 'Playfair Display'; margin-bottom: 15px;">لوفينج هوميز</h1>
+            <p style="font-size: 1.4rem; font-weight: 300;">عنوانك للرفاهية والهدوء المطلق</p>
+            <div style="margin-top: 40px;">
+                <button class="btn-gold" onclick="showPage('offers')">شاهد العروض الحصرية</button>
+            </div>
+        </section>
+        <div class="container" style="text-align: center;">
+            <h2>تجربة تفوق الخيال</h2>
+            <p style="max-width: 800px; margin: 20px auto; color: #555;">نحن نصمم لك تجربة حياتية مليئة بالتفاصيل التي تلامس الروح.</p>
+        </div>
+    </div>
+
+    <div id="rooms" class="page">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px;">أجنحتنا وغرفنا المختارة</h2>
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600">
+                    <div class="card-body">
+                        <h3>جناح السحاب الملكي</h3>
+                        <p>600$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('جناح السحاب الملكي', 600)">احجز الآن</button></div>
+                </div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?w=600">
+                    <div class="card-body">
+                        <h3>الجناح التنفيذي</h3>
+                        <p>450$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('الجناح التنفيذي', 450)">احجز الآن</button></div>
+                </div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600">
+                    <div class="card-body">
+                        <h3>غرفة العائلة الكبيرة</h3>
+                        <p>350$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('غرفة العائلة الكبيرة', 350)">احجز الآن</button></div>
+                </div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600">
+                    <div class="card-body">
+                        <h3>غرفة الجاردينيا</h3>
+                        <p>280$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('غرفة الجاردينيا', 280)">احجز الآن</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="amenities" class="page">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px;">عالم من الخدمات</h2>
+            <div class="grid">
+                <div class="card-body" style="text-align: center;"><i class="fas fa-spa" style="font-size:3rem; color:var(--gold)"></i>
+                    <h3>الساكينة سبا</h3>
+                    <p>جلسات استرخاء بأيدي خبراء.</p>
+                </div>
+                <div class="card-body" style="text-align: center;"><i class="fas fa-utensils" style="font-size:3rem; color:var(--gold)"></i>
+                    <h3>مطعم ذوق</h3>
+                    <p>أطباق عالمية فاخرة.</p>
+                </div>
+                <div class="card-body" style="text-align: center;"><i class="fas fa-concierge-bell" style="font-size:3rem; color:var(--gold)"></i>
+                    <h3>خادم شخصي</h3>
+                    <p>خدمة 24 ساعة.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="offers" class="page">
+        <div class="container">
+            <h2 style="text-align: center; color: var(--danger); margin-bottom: 40px;">عروض لا تكرر</h2>
+            <div class="offer-card"><img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500" class="offer-img">
+                <div class="offer-content"><span class="offer-tag">خصم 40%</span>
+                    <h3>باقة شهر العسل</h3>
+                    <p>799$ <small style="text-decoration:line-through">1300$</small></p><button class="btn-gold" onclick="openPayment('شهر العسل', 799)">احجز العرض</button></div>
+            </div>
+            <div class="offer-card"><img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=500" class="offer-img">
+                <div class="offer-content"><span class="offer-tag">عرض محدود</span>
+                    <h3>ويكند الاستجمام</h3>
+                    <p>299$ فقط</p><button class="btn-gold" onclick="openPayment('ويكند الاستجمام', 299)">احجز العرض</button></div>
+            </div>
+            <div class="offer-card"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" class="offer-img">
+                <div class="offer-content"><span class="offer-tag">خصم 30%</span>
+                    <h3>باقة الأعمال</h3>
+                    <p>1200$</p><button class="btn-gold" onclick="openPayment('باقة الأعمال', 1200)">احجز العرض</button></div>
+            </div>
+            <div class="offer-card"><img src="https://images.unsplash.com/photo-1551882547-ff43c63efe8c?w=500" class="offer-img">
+                <div class="offer-content"><span class="offer-tag">عائلي مميز</span>
+                    <h3>مغامرة العائلة</h3>
+                    <p>550$</p><button class="btn-gold" onclick="openPayment('مغامرة العائلة', 550)">احجز العرض</button></div>
+            </div>
+            <div class="offer-card"><img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=500" class="offer-img">
+                <div class="offer-content"><span class="offer-tag">احجز مبكراً</span>
+                    <h3>باقة الشتاء</h3>
+                    <p>خصم 50%</p><button class="btn-gold" onclick="showPage('contact')">استفسر الآن</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="page">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 50px;">تواصل معنا</h2>
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h3>معلوماتنا</h3>
+                    <p><i class="fas fa-phone"></i> 966 500 000 000+</p>
+                    <p><i class="fas fa-envelope"></i> info@lovinghomes.com</p>
+                </div>
+                <div class="contact-form"><input type="text" placeholder="الاسم"><input type="email" placeholder="البريد"><textarea rows="4" placeholder="رسالتك"></textarea><button class="btn-gold" style="width:100%" onclick="alert('تم الإرسال')">إرسال</button></div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background: var(--black); color: var(--white); padding: 60px 8% 20px; margin-top: 50px; border-top: 4px solid var(--gold);">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+            <div>
+                <h3 style="color: var(--gold); font-family: 'Playfair Display'; margin-bottom: 20px;">LOVING HOMES</h3>
+                <p style="color: #bbb; font-size: 0.9rem; line-height: 1.8;">نقدم لك تجربة سكنية استثنائية تجمع بين دفء المنزل وفخامة الفنادق العالمية.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">تابعنا على السوشيال ميديا</h4>
+                <div style="display: flex; gap: 20px; font-size: 1.6rem;">
+                    <a href="https://instagram.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-instagram"></i></a>
+                    <a href="https://twitter.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-x-twitter"></i></a>
+                    <a href="https://facebook.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://linkedin.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 20px;">الشؤون القانونية</h4>
+                <ul style="list-style: none;">
+                    <li style="margin-bottom: 12px;"><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none; font-size: 0.95rem;">سياسة الخصوصية</a></li>
+                    <li><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none; font-size: 0.95rem;">شروط الحجز والاستخدام</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border: 0; border-top: 1px solid #333; margin-bottom: 25px;">
+        <div style="text-align: center; color: #777; font-size: 0.9rem;">
+            <p>جميع الحقوق محفوظة &copy; 2025 لشركة <span style="color: var(--gold);">LOVING HOMES</span> الفندقية المحدودة</p>
+        </div>
+    </footer>
+
+    <div id="privacy-modal" class="modal-overlay">
+        <div class="modal-card">
+            <span onclick="closePrivacy()" style="position: absolute; top: 20px; left: 20px; cursor: pointer; font-size: 1.5rem;">&times;</span>
+            <h2 style="color: var(--gold); margin-bottom: 20px;">سياسة الخصوصية</h2>
+            <div style="color: #444; font-size: 0.95rem; line-height: 1.7; height: 300px; overflow-y: auto; padding-left: 10px;">
+                <p><strong>أولاً:</strong> نحن نلتزم بحماية كافة بياناتك الشخصية والبنكية بأعلى معايير التشفير العالمية.</p><br>
+                <p><strong>ثانياً:</strong> يتم استخدام الكوكيز فقط لتحسين تجربة تصفحك وتقديم العروض التي تناسب اهتماماتك.</p><br>
+                <p><strong>ثالثاً:</strong> لا نقوم بمشاركة أي معلومات تخص النزلاء مع أي جهات خارجية إلا بموافقة قانونية صريحة.</p><br>
+                <p><strong>رابعاً:</strong> يحق للعميل طلب حذف بياناته من سجلاتنا التسويقية في أي وقت من خلال التواصل مع الدعم الفني.</p>
+            </div>
+            <button class="btn-gold" onclick="closePrivacy()" style="width: 100%; margin-top: 25px;">إغلاق وقبول الشروط</button>
+        </div>
+    </div>
+
+    <div id="payment-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3 id="p-name"></h3>
+            <p id="p-price" style="color:var(--gold); font-weight:900; margin: 15px 0;"></p>
+            <input type="text" placeholder="رقم البطاقة">
+            <div style="display:flex; gap:10px;"><input type="text" placeholder="MM/YY"><input type="text" placeholder="CVV"></div>
+            <button class="btn-gold" style="width:100%" onclick="finish()">تأكيد الحجز</button>
+            <button onclick="closePayment()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer; color:#999;">إلغاء</button>
+        </div>
+    </div>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            const link = document.getElementById('lnk-' + id);
+            if (link) link.classList.add('active');
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function openPayment(name, price) {
+            document.getElementById('p-name').innerText = "حجز " + name;
+            document.getElementById('p-price').innerText = "المبلغ: " + price + "$";
+            document.getElementById('payment-modal').style.display = 'flex';
+        }
+
+        function closePayment() {
+            document.getElementById('payment-modal').style.display = 'none';
+        }
+
+        function finish() {
+            alert("تم الحجز بنجاح!");
+            closePayment();
+        }
+
+        // وظائف الخصوصية
+        function openPrivacy() {
+            document.getElementById('privacy-modal').style.display = 'flex';
+        }
+
+        function closePrivacy() {
+            document.getElementById('privacy-modal').style.display = 'none';
+        }
+
+        // إغلاق المودال عند الضغط خارجه
+        window.onclick = function(e) {
+            if (e.target.className === 'modal-overlay') {
+                closePayment();
+                closePrivacy();
+            }
+        }
+    </script>
+
+</body>
+
+</html>
