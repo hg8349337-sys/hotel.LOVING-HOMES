@@ -32,7 +32,7 @@
             color: var(--black);
             line-height: 1.6;
         }
-        /* Navigation */
+        /* --- Navigation --- */
         
         nav {
             position: fixed;
@@ -55,6 +55,11 @@
             cursor: pointer;
         }
         
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
         .nav-links a {
             text-decoration: none;
             color: var(--black);
@@ -69,7 +74,14 @@
         .nav-links a.active {
             color: var(--gold);
         }
-        /* Page System */
+        
+        .menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--gold);
+            cursor: pointer;
+        }
+        /* --- Page System --- */
         
         .page {
             display: none;
@@ -110,13 +122,14 @@
             border-radius: 4px;
             display: inline-block;
             text-decoration: none;
+            text-align: center;
         }
         
         .btn-gold:hover {
             background: var(--black);
             transform: translateY(-3px);
         }
-        /* Hero */
+        /* --- Hero Section --- */
         
         .hero {
             height: 80vh;
@@ -127,8 +140,20 @@
             align-items: center;
             color: white;
             text-align: center;
+            padding: 0 20px;
         }
-        /* Cards & Grid */
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 15px;
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            font-weight: 300;
+        }
+        /* --- Grid & Cards --- */
         
         .grid {
             display: grid;
@@ -158,6 +183,18 @@
             padding: 25px;
         }
         
+        .card-body h3 {
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+        
+        .card-body p {
+            color: var(--gold);
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        /* --- Offers Section --- */
+        
         .offer-card {
             background: var(--white);
             border-radius: 15px;
@@ -166,6 +203,7 @@
             margin-bottom: 40px;
             border: 2px dashed var(--gold);
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            transition: 0.3s;
         }
         
         .offer-img {
@@ -185,8 +223,10 @@
             border-radius: 4px;
             font-size: 0.8rem;
             font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
         }
-        /* Contact Wrapper */
+        /* --- Contact Section --- */
         
         .contact-wrapper {
             display: grid;
@@ -196,6 +236,18 @@
             padding: 40px;
             border-radius: 20px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+        }
+        
+        .contact-info h3 {
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+        
+        .contact-info p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         input,
@@ -208,8 +260,14 @@
             margin-bottom: 15px;
             font-size: 1rem;
             outline: none;
+            transition: 0.3s;
         }
-        /* Modals (Payment & Privacy) */
+        
+        input:focus,
+        textarea:focus {
+            border-color: var(--gold);
+        }
+        /* --- Modals --- */
         
         .modal-overlay {
             position: fixed;
@@ -223,15 +281,72 @@
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(8px);
+            padding: 20px;
         }
         
         .modal-card {
             background: white;
             padding: 40px;
-            width: 90%;
+            width: 95%;
             max-width: 500px;
             border-radius: 20px;
             position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        /* --- Responsive Queries --- */
+        
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            }
+            .nav-links.mobile-open {
+                display: flex;
+            }
+            .nav-links a {
+                margin: 12px 0;
+                font-size: 1.1rem;
+                width: 100%;
+                text-align: center;
+            }
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .offer-card {
+                flex-direction: column;
+            }
+            .offer-img {
+                width: 100%;
+                height: 220px;
+            }
+            .offer-content {
+                padding: 25px;
+            }
+            .contact-wrapper {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr !important;
+                text-align: center;
+            }
+            .social-links {
+                justify-content: center !important;
+            }
         }
     </style>
 </head>
@@ -240,7 +355,8 @@
 
     <nav>
         <div class="logo" onclick="showPage('home')">LOVING HOMES</div>
-        <div class="nav-links">
+        <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <div class="nav-links" id="navLinks">
             <a onclick="showPage('home')" id="lnk-home" class="active">الرئيسية</a>
             <a onclick="showPage('rooms')" id="lnk-rooms">الغرف والأجنحة</a>
             <a onclick="showPage('amenities')" id="lnk-amenities">المرافق</a>
@@ -251,41 +367,53 @@
 
     <div id="home" class="page active">
         <section class="hero">
-            <h1 style="font-size: 4rem; font-family: 'Playfair Display'; margin-bottom: 15px;">لوفينج هوميز</h1>
-            <p style="font-size: 1.4rem; font-weight: 300;">عنوانك للرفاهية والهدوء المطلق</p>
+            <h1>لوفينج هوميز</h1>
+            <p>عنوانك للرفاهية والهدوء المطلق</p>
             <div style="margin-top: 40px;">
                 <button class="btn-gold" onclick="showPage('offers')">شاهد العروض الحصرية</button>
             </div>
         </section>
         <div class="container" style="text-align: center;">
-            <h2>تجربة تفوق الخيال</h2>
-            <p style="max-width: 800px; margin: 20px auto; color: #555;">نحن نصمم لك تجربة حياتية مليئة بالتفاصيل التي تلامس الروح.</p>
+            <h2 style="font-family: 'Playfair Display'; font-size: 2.5rem; margin-bottom: 20px;">تجربة تفوق الخيال</h2>
+            <p style="max-width: 800px; margin: 0 auto; color: #555; font-size: 1.1rem;">نحن في لوفينج هوميز لا نقدم مجرد غرف، بل نصمم لك تجربة حياتية مليئة بالتفاصيل التي تلامس الروح وتمنحك الخصوصية التي تستحقها.</p>
         </div>
     </div>
 
     <div id="rooms" class="page">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 50px;">أجنحتنا وغرفنا المختارة</h2>
+            <h2 style="text-align: center; margin-bottom: 50px; font-family: 'Playfair Display'; font-size: 2.5rem;">أجنحتنا وغرفنا المختارة</h2>
             <div class="grid">
-                <div class="card"><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600">
                     <div class="card-body">
                         <h3>جناح السحاب الملكي</h3>
-                        <p>600$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('جناح السحاب الملكي', 600)">احجز الآن</button></div>
+                        <p>600$ / ليلة</p>
+                        <button class="btn-gold" style="width:100%" onclick="openPayment('جناح السحاب الملكي', 600)">احجز الآن</button>
+                    </div>
                 </div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?w=600">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1591088398332-8a7791972843?w=600">
                     <div class="card-body">
                         <h3>الجناح التنفيذي</h3>
-                        <p>450$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('الجناح التنفيذي', 450)">احجز الآن</button></div>
+                        <p>450$ / ليلة</p>
+                        <button class="btn-gold" style="width:100%" onclick="openPayment('الجناح التنفيذي', 450)">احجز الآن</button>
+                    </div>
                 </div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?w=600">
                     <div class="card-body">
                         <h3>غرفة العائلة الكبيرة</h3>
-                        <p>350$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('غرفة العائلة الكبيرة', 350)">احجز الآن</button></div>
+                        <p>350$ / ليلة</p>
+                        <button class="btn-gold" style="width:100%" onclick="openPayment('غرفة العائلة الكبيرة', 350)">احجز الآن</button>
+                    </div>
                 </div>
-                <div class="card"><img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?w=600">
                     <div class="card-body">
                         <h3>غرفة الجاردينيا</h3>
-                        <p>280$ / ليلة</p><button class="btn-gold" style="width:100%" onclick="openPayment('غرفة الجاردينيا', 280)">احجز الآن</button></div>
+                        <p>280$ / ليلة</p>
+                        <button class="btn-gold" style="width:100%" onclick="openPayment('غرفة الجاردينيا', 280)">احجز الآن</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -293,19 +421,22 @@
 
     <div id="amenities" class="page">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 50px;">عالم من الخدمات</h2>
+            <h2 style="text-align: center; margin-bottom: 50px; font-family: 'Playfair Display'; font-size: 2.5rem;">عالم من الخدمات الفاخرة</h2>
             <div class="grid">
-                <div class="card-body" style="text-align: center;"><i class="fas fa-spa" style="font-size:3rem; color:var(--gold)"></i>
-                    <h3>الساكينة سبا</h3>
-                    <p>جلسات استرخاء بأيدي خبراء.</p>
+                <div class="card" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-spa" style="font-size:4rem; color:var(--gold); margin-bottom: 20px;"></i>
+                    <h3>السكينة سبا</h3>
+                    <p style="color:#666; font-weight: normal;">جلسات استرخاء علاجية بأيدي خبراء عالميين.</p>
                 </div>
-                <div class="card-body" style="text-align: center;"><i class="fas fa-utensils" style="font-size:3rem; color:var(--gold)"></i>
+                <div class="card" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-utensils" style="font-size:4rem; color:var(--gold); margin-bottom: 20px;"></i>
                     <h3>مطعم ذوق</h3>
-                    <p>أطباق عالمية فاخرة.</p>
+                    <p style="color:#666; font-weight: normal;">أطباق عالمية محضرة بشغف لتناسب ذوقك الرفيع.</p>
                 </div>
-                <div class="card-body" style="text-align: center;"><i class="fas fa-concierge-bell" style="font-size:3rem; color:var(--gold)"></i>
+                <div class="card" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-concierge-bell" style="font-size:4rem; color:var(--gold); margin-bottom: 20px;"></i>
                     <h3>خادم شخصي</h3>
-                    <p>خدمة 24 ساعة.</p>
+                    <p style="color:#666; font-weight: normal;">خدمة مخصصة على مدار الساعة لتلبية كافة احتياجاتك.</p>
                 </div>
             </div>
         </div>
@@ -313,58 +444,94 @@
 
     <div id="offers" class="page">
         <div class="container">
-            <h2 style="text-align: center; color: var(--danger); margin-bottom: 40px;">عروض لا تكرر</h2>
-            <div class="offer-card"><img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500" class="offer-img">
-                <div class="offer-content"><span class="offer-tag">خصم 40%</span>
-                    <h3>باقة شهر العسل</h3>
-                    <p>799$ <small style="text-decoration:line-through">1300$</small></p><button class="btn-gold" onclick="openPayment('شهر العسل', 799)">احجز العرض</button></div>
+            <h2 style="text-align: center; color: var(--danger); margin-bottom: 40px; font-family: 'Playfair Display'; font-size: 2.5rem;">عروض حصرية لفترة محدودة</h2>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500" class="offer-img">
+                <div class="offer-content">
+                    <span class="offer-tag">خصم 40%</span>
+                    <h3>باقة شهر العسل الرومانسية</h3>
+                    <p style="color: #333; margin: 15px 0;">استمتع بجناح السحاب مع تزيين خاص وعشاء رومانسي مجاني.</p>
+                    <p style="font-size: 1.5rem;">799$ <small style="text-decoration:line-through; color: #999; font-size: 1rem;">1300$</small></p>
+                    <button class="btn-gold" onclick="openPayment('شهر العسل', 799)">احجز العرض الآن</button>
+                </div>
             </div>
-            <div class="offer-card"><img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=500" class="offer-img">
-                <div class="offer-content"><span class="offer-tag">عرض محدود</span>
-                    <h3>ويكند الاستجمام</h3>
-                    <p>299$ فقط</p><button class="btn-gold" onclick="openPayment('ويكند الاستجمام', 299)">احجز العرض</button></div>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=500" class="offer-img">
+                <div class="offer-content">
+                    <span class="offer-tag">عرض الويكند</span>
+                    <h3>ويكند الاستجمام العائلي</h3>
+                    <p style="color: #333; margin: 15px 0;">ليلتين شاملة الإفطار والدخول للسبا لجميع أفراد العائلة.</p>
+                    <p style="font-size: 1.5rem;">299$ فقط</p>
+                    <button class="btn-gold" onclick="openPayment('ويكند الاستجمام', 299)">احجز العرض الآن</button>
+                </div>
             </div>
-            <div class="offer-card"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" class="offer-img">
-                <div class="offer-content"><span class="offer-tag">خصم 30%</span>
-                    <h3>باقة الأعمال</h3>
-                    <p>1200$</p><button class="btn-gold" onclick="openPayment('باقة الأعمال', 1200)">احجز العرض</button></div>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500" class="offer-img">
+                <div class="offer-content">
+                    <span class="offer-tag">خصم 30%</span>
+                    <h3>باقة الأعمال الذكية</h3>
+                    <p style="color: #333; margin: 15px 0;">إقامة هادئة مع خدمة إنترنت فائق السرعة واستخدام قاعات الاجتماعات.</p>
+                    <p style="font-size: 1.5rem;">1200$ <small style="color:#999; font-size:1rem;">أسبوع كامل</small></p>
+                    <button class="btn-gold" onclick="openPayment('باقة الأعمال', 1200)">احجز العرض الآن</button>
+                </div>
             </div>
-            <div class="offer-card"><img src="https://images.unsplash.com/photo-1551882547-ff43c63efe8c?w=500" class="offer-img">
-                <div class="offer-content"><span class="offer-tag">عائلي مميز</span>
-                    <h3>مغامرة العائلة</h3>
-                    <p>550$</p><button class="btn-gold" onclick="openPayment('مغامرة العائلة', 550)">احجز العرض</button></div>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1551882547-ff43c63efe8c?w=500" class="offer-img">
+                <div class="offer-content">
+                    <span class="offer-tag">عرض الصيف</span>
+                    <h3>مغامرة العائلة الكبيرة</h3>
+                    <p style="color: #333; margin: 15px 0;">جناح عائلي واسع مع تذاكر دخول للمدينة الترفيهية المجاورة.</p>
+                    <p style="font-size: 1.5rem;">550$ / ليلة</p>
+                    <button class="btn-gold" onclick="openPayment('مغامرة العائلة', 550)">احجز العرض الآن</button>
+                </div>
             </div>
-            <div class="offer-card"><img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=500" class="offer-img">
-                <div class="offer-content"><span class="offer-tag">احجز مبكراً</span>
-                    <h3>باقة الشتاء</h3>
-                    <p>خصم 50%</p><button class="btn-gold" onclick="showPage('contact')">استفسر الآن</button></div>
+
+            <div class="offer-card">
+                <img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=500" class="offer-img">
+                <div class="offer-content">
+                    <span class="offer-tag">احجز مبكراً</span>
+                    <h3>باقة الشتاء الدافئة</h3>
+                    <p style="color: #333; margin: 15px 0;">احجز قبل موعد وصولك بـ 30 يوم واحصل على نصف القيمة خصم فوري.</p>
+                    <p style="font-size: 1.5rem; color: var(--danger);">خصم 50%</p>
+                    <button class="btn-gold" onclick="showPage('contact')">استفسر عن الباقة</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="contact" class="page">
         <div class="container">
-            <h2 style="text-align: center; margin-bottom: 50px;">تواصل معنا</h2>
+            <h2 style="text-align: center; margin-bottom: 50px; font-family: 'Playfair Display'; font-size: 2.5rem;">تواصل معنا</h2>
             <div class="contact-wrapper">
                 <div class="contact-info">
-                    <h3>معلوماتنا</h3>
-                    <p><i class="fas fa-phone"></i> 966 500 000 000+</p>
-                    <p><i class="fas fa-envelope"></i> info@lovinghomes.com</p>
+                    <h3>معلومات التواصل</h3>
+                    <p><i class="fas fa-phone-alt" style="color: var(--gold);"></i> 966 500 000 000+</p>
+                    <p><i class="fas fa-envelope" style="color: var(--gold);"></i> info@lovinghomes.com</p>
+                    <p><i class="fas fa-map-marker-alt" style="color: var(--gold);"></i> الرياض، المملكة العربية السعودية</p>
                 </div>
-                <div class="contact-form"><input type="text" placeholder="الاسم"><input type="email" placeholder="البريد"><textarea rows="4" placeholder="رسالتك"></textarea><button class="btn-gold" style="width:100%" onclick="alert('تم الإرسال')">إرسال</button></div>
+                <div class="contact-form">
+                    <input type="text" placeholder="الاسم الكامل">
+                    <input type="email" placeholder="البريد الإلكتروني">
+                    <textarea rows="5" placeholder="كيف يمكننا مساعدتك؟"></textarea>
+                    <button class="btn-gold" style="width:100%" onclick="alert('شكرًا لرسالتك، سنتصل بك قريبًا!')">إرسال الرسالة</button>
+                </div>
             </div>
         </div>
     </div>
 
     <footer style="background: var(--black); color: var(--white); padding: 60px 8% 20px; margin-top: 50px; border-top: 4px solid var(--gold);">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+        <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
             <div>
                 <h3 style="color: var(--gold); font-family: 'Playfair Display'; margin-bottom: 20px;">LOVING HOMES</h3>
-                <p style="color: #bbb; font-size: 0.9rem; line-height: 1.8;">نقدم لك تجربة سكنية استثنائية تجمع بين دفء المنزل وفخامة الفنادق العالمية.</p>
+                <p style="color: #bbb; font-size: 0.9rem; line-height: 1.8;">نقدم لك تجربة سكنية استثنائية تجمع بين دفء المنزل وفخامة الفنادق العالمية بأعلى معايير الخصوصية.</p>
             </div>
             <div>
                 <h4 style="margin-bottom: 20px;">تابعنا على السوشيال ميديا</h4>
-                <div style="display: flex; gap: 20px; font-size: 1.6rem;">
+                <div class="social-links" style="display: flex; gap: 20px; font-size: 1.6rem;">
                     <a href="https://instagram.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-instagram"></i></a>
                     <a href="https://twitter.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-x-twitter"></i></a>
                     <a href="https://facebook.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-facebook-f"></i></a>
@@ -372,7 +539,7 @@
                 </div>
             </div>
             <div>
-                <h4 style="margin-bottom: 20px;">الشؤون القانونية</h4>
+                <h4 style="margin-bottom: 20px;">روابط قانونية</h4>
                 <ul style="list-style: none;">
                     <li style="margin-bottom: 12px;"><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none; font-size: 0.95rem;">سياسة الخصوصية</a></li>
                     <li><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none; font-size: 0.95rem;">شروط الحجز والاستخدام</a></li>
@@ -388,12 +555,12 @@
     <div id="privacy-modal" class="modal-overlay">
         <div class="modal-card">
             <span onclick="closePrivacy()" style="position: absolute; top: 20px; left: 20px; cursor: pointer; font-size: 1.5rem;">&times;</span>
-            <h2 style="color: var(--gold); margin-bottom: 20px;">سياسة الخصوصية</h2>
+            <h2 style="color: var(--gold); margin-bottom: 20px;">سياسة الخصوصية والأمان</h2>
             <div style="color: #444; font-size: 0.95rem; line-height: 1.7; height: 300px; overflow-y: auto; padding-left: 10px;">
-                <p><strong>أولاً:</strong> نحن نلتزم بحماية كافة بياناتك الشخصية والبنكية بأعلى معايير التشفير العالمية.</p><br>
-                <p><strong>ثانياً:</strong> يتم استخدام الكوكيز فقط لتحسين تجربة تصفحك وتقديم العروض التي تناسب اهتماماتك.</p><br>
-                <p><strong>ثالثاً:</strong> لا نقوم بمشاركة أي معلومات تخص النزلاء مع أي جهات خارجية إلا بموافقة قانونية صريحة.</p><br>
-                <p><strong>رابعاً:</strong> يحق للعميل طلب حذف بياناته من سجلاتنا التسويقية في أي وقت من خلال التواصل مع الدعم الفني.</p>
+                <p><strong>1. حماية البيانات:</strong> نحن نلتزم بحماية كافة بياناتك الشخصية والبنكية باستخدام أعلى معايير التشفير SSL العالمية.</p><br>
+                <p><strong>2. استخدام المعلومات:</strong> يتم استخدام بياناتك فقط لتحسين تجربة الحجز الخاصة بك وإرسال العروض الحصرية التي قد تهمك.</p><br>
+                <p><strong>3. الكوكيز:</strong> يستخدم موقعنا ملفات تعريف الارتباط لضمان سهولة التنقل وتذكر تفضيلاتك الشخصية عند العودة مرة أخرى.</p><br>
+                <p><strong>4. شروط الإلغاء:</strong> تختلف سياسة استرداد الأموال بناءً على نوع الباقة المختارة، يرجى مراجعة تفاصيل كل حجز قبل التأكيد.</p>
             </div>
             <button class="btn-gold" onclick="closePrivacy()" style="width: 100%; margin-top: 25px;">إغلاق وقبول الشروط</button>
         </div>
@@ -401,31 +568,49 @@
 
     <div id="payment-modal" class="modal-overlay">
         <div class="modal-card">
-            <h3 id="p-name"></h3>
-            <p id="p-price" style="color:var(--gold); font-weight:900; margin: 15px 0;"></p>
-            <input type="text" placeholder="رقم البطاقة">
-            <div style="display:flex; gap:10px;"><input type="text" placeholder="MM/YY"><input type="text" placeholder="CVV"></div>
-            <button class="btn-gold" style="width:100%" onclick="finish()">تأكيد الحجز</button>
-            <button onclick="closePayment()" style="width:100%; background:none; border:none; margin-top:10px; cursor:pointer; color:#999;">إلغاء</button>
+            <h3 id="p-name" style="margin-bottom: 10px;"></h3>
+            <p id="p-price" style="color:var(--gold); font-weight:900; font-size: 1.5rem; margin-bottom: 20px;"></p>
+            <input type="text" placeholder="الاسم على البطاقة">
+            <input type="text" placeholder="رقم البطاقة الائتمانية (16 رقم)">
+            <div style="display:flex; gap:10px;">
+                <input type="text" placeholder="MM/YY">
+                <input type="text" placeholder="CVV">
+            </div>
+            <button class="btn-gold" style="width:100%; margin-top: 10px;" onclick="finish()">تأكيد عملية الدفع</button>
+            <button onclick="closePayment()" style="width:100%; background:none; border:none; margin-top:15px; cursor:pointer; color:#999;">إلغاء العملية والعودة</button>
         </div>
     </div>
 
     <script>
+        // التبديل بين الصفحات
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+
+            // تحديث الروابط في النافبار
             document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
             const link = document.getElementById('lnk-' + id);
             if (link) link.classList.add('active');
+
+            // إغلاق قائمة الجوال عند اختيار صفحة
+            document.getElementById('navLinks').classList.remove('mobile-open');
+
+            // العودة لأعلى الصفحة
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
         }
 
+        // التحكم بقائمة الجوال
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('mobile-open');
+        }
+
+        // نافذة الدفع
         function openPayment(name, price) {
-            document.getElementById('p-name').innerText = "حجز " + name;
-            document.getElementById('p-price').innerText = "المبلغ: " + price + "$";
+            document.getElementById('p-name').innerText = "تأكيد حجز " + name;
+            document.getElementById('p-price').innerText = "إجمالي المبلغ: " + price + "$";
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
@@ -434,11 +619,11 @@
         }
 
         function finish() {
-            alert("تم الحجز بنجاح!");
+            alert("تم معالجة الدفع وحجز الجناح بنجاح! ننتظر زيارتك بكل شغف.");
             closePayment();
         }
 
-        // وظائف الخصوصية
+        // نافذة الخصوصية
         function openPrivacy() {
             document.getElementById('privacy-modal').style.display = 'flex';
         }
@@ -447,7 +632,7 @@
             document.getElementById('privacy-modal').style.display = 'none';
         }
 
-        // إغلاق المودال عند الضغط خارجه
+        // إغلاق النوافذ عند الضغط خارجها
         window.onclick = function(e) {
             if (e.target.className === 'modal-overlay') {
                 closePayment();
