@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <style>
+        /* المتغيرات العامة للألوان */
+        
          :root {
             --gold: #C5A059;
             --black: #0B0B0B;
@@ -18,6 +20,7 @@
             --danger: #e74c3c;
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
         }
+        /* تصفير الإعدادات الافتراضية */
         
         * {
             margin: 0;
@@ -32,7 +35,7 @@
             color: var(--black);
             line-height: 1.6;
         }
-        /* --- Navigation --- */
+        /* --- شريط التنقل (Navigation) --- */
         
         nav {
             position: fixed;
@@ -49,11 +52,13 @@
         
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: var(--gold);
             cursor: pointer;
+            letter-spacing: 1px;
         }
+        /* روابط التنقل في وضع الديسكتوب */
         
         .nav-links {
             display: flex;
@@ -63,23 +68,104 @@
         .nav-links a {
             text-decoration: none;
             color: var(--black);
-            margin: 0 12px;
+            margin: 0 15px;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
             font-size: 0.95rem;
+            position: relative;
+        }
+        
+        .nav-links a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            right: 0;
+            background-color: var(--gold);
+            transition: 0.3s;
+        }
+        
+        .nav-links a:hover:after,
+        .nav-links a.active:after {
+            width: 100%;
         }
         
         .nav-links a:hover,
         .nav-links a.active {
             color: var(--gold);
         }
+        /* أيقونة الثلاث شحطات (Hamburger Menu) */
         
-        .menu-btn {
+        .menu-toggle {
             display: none;
-            font-size: 1.5rem;
-            color: var(--gold);
+            /* مخفية في الشاشات الكبيرة */
+            flex-direction: column;
+            gap: 6px;
             cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .menu-toggle span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background: var(--gold);
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+        /* --- القائمة الجانبية للجوال --- */
+        
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            /* مخفية خارج الشاشة */
+            width: 80%;
+            height: 100vh;
+            background: var(--white);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu.open {
+            right: 0;
+            /* تظهر عند الضغط */
+        }
+        
+        .mobile-menu a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 20px 0;
+            transition: 0.3s;
+        }
+        
+        .mobile-menu a:hover {
+            color: var(--gold);
+        }
+        /* غطاء خلفي عند فتح القائمة */
+        
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 998;
+        }
+        
+        .menu-overlay.active {
+            display: block;
         }
         /* --- Page System --- */
         
@@ -294,34 +380,19 @@
             max-height: 90vh;
             overflow-y: auto;
         }
-        /* --- Responsive Queries --- */
+        /* --- Media Queries --- */
         
-        @media (max-width: 768px) {
-            .menu-btn {
-                display: block;
-            }
+        @media (max-width: 992px) {
             .nav-links {
                 display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background: white;
-                flex-direction: column;
-                padding: 20px;
-                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
             }
-            .nav-links.mobile-open {
+            /* إخفاء الروابط العادية */
+            .menu-toggle {
                 display: flex;
             }
-            .nav-links a {
-                margin: 12px 0;
-                font-size: 1.1rem;
-                width: 100%;
-                text-align: center;
-            }
+            /* إظهار الثلاث شحطات */
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
             .hero p {
                 font-size: 1.1rem;
@@ -331,21 +402,10 @@
             }
             .offer-img {
                 width: 100%;
-                height: 220px;
-            }
-            .offer-content {
-                padding: 25px;
+                height: 250px;
             }
             .contact-wrapper {
                 grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr !important;
-                text-align: center;
-            }
-            .social-links {
-                justify-content: center !important;
             }
         }
     </style>
@@ -353,17 +413,33 @@
 
 <body>
 
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
     <nav>
         <div class="logo" onclick="showPage('home')">LOVING HOMES</div>
-        <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-        <div class="nav-links" id="navLinks">
+
+        <div class="nav-links">
             <a onclick="showPage('home')" id="lnk-home" class="active">الرئيسية</a>
             <a onclick="showPage('rooms')" id="lnk-rooms">الغرف والأجنحة</a>
             <a onclick="showPage('amenities')" id="lnk-amenities">المرافق</a>
             <a onclick="showPage('offers')" id="lnk-offers" style="color: var(--danger);"><i class="fas fa-fire"></i> عروض حصرية</a>
             <a onclick="showPage('contact')" id="lnk-contact">تواصل معنا</a>
         </div>
+
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a onclick="showPage('home'); toggleMenu()">الرئيسية</a>
+        <a onclick="showPage('rooms'); toggleMenu()">الغرف والأجنحة</a>
+        <a onclick="showPage('amenities'); toggleMenu()">المرافق</a>
+        <a onclick="showPage('offers'); toggleMenu()" style="color: var(--danger);">عروض حصرية</a>
+        <a onclick="showPage('contact'); toggleMenu()">تواصل معنا</a>
+    </div>
 
     <div id="home" class="page active">
         <section class="hero">
@@ -426,17 +502,17 @@
                 <div class="card" style="text-align: center; padding: 40px;">
                     <i class="fas fa-spa" style="font-size:4rem; color:var(--gold); margin-bottom: 20px;"></i>
                     <h3>السكينة سبا</h3>
-                    <p style="color:#666; font-weight: normal;">جلسات استرخاء علاجية بأيدي خبراء عالميين.</p>
+                    <p>جلسات استرخاء علاجية بأيدي خبراء عالميين.</p>
                 </div>
                 <div class="card" style="text-align: center; padding: 40px;">
                     <i class="fas fa-utensils" style="font-size:4rem; color:var(--gold); margin-bottom: 20px;"></i>
                     <h3>مطعم ذوق</h3>
-                    <p style="color:#666; font-weight: normal;">أطباق عالمية محضرة بشغف لتناسب ذوقك الرفيع.</p>
+                    <p>أطباق عالمية محضرة بشغف لتناسب ذوقك الرفيع.</p>
                 </div>
                 <div class="card" style="text-align: center; padding: 40px;">
                     <i class="fas fa-concierge-bell" style="font-size:4rem; color:var(--gold); margin-bottom: 20px;"></i>
                     <h3>خادم شخصي</h3>
-                    <p style="color:#666; font-weight: normal;">خدمة مخصصة على مدار الساعة لتلبية كافة احتياجاتك.</p>
+                    <p>خدمة مخصصة على مدار الساعة لتلبية احتياجاتك.</p>
                 </div>
             </div>
         </div>
@@ -444,15 +520,15 @@
 
     <div id="offers" class="page">
         <div class="container">
-            <h2 style="text-align: center; color: var(--danger); margin-bottom: 40px; font-family: 'Playfair Display'; font-size: 2.5rem;">عروض حصرية لفترة محدودة</h2>
+            <h2 style="text-align: center; color: var(--danger); margin-bottom: 40px; font-family: 'Playfair Display'; font-size: 2.5rem;">عروض حصرية 2025</h2>
 
             <div class="offer-card">
                 <img src="https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=500" class="offer-img">
                 <div class="offer-content">
                     <span class="offer-tag">خصم 40%</span>
                     <h3>باقة شهر العسل الرومانسية</h3>
-                    <p style="color: #333; margin: 15px 0;">استمتع بجناح السحاب مع تزيين خاص وعشاء رومانسي مجاني.</p>
-                    <p style="font-size: 1.5rem;">799$ <small style="text-decoration:line-through; color: #999; font-size: 1rem;">1300$</small></p>
+                    <p>استمتع بجناح السحاب مع تزيين خاص وعشاء رومانسي مجاني.</p>
+                    <p style="font-size: 1.5rem;">799$ <small style="text-decoration:line-through; color: #999;">1300$</small></p>
                     <button class="btn-gold" onclick="openPayment('شهر العسل', 799)">احجز العرض الآن</button>
                 </div>
             </div>
@@ -462,7 +538,7 @@
                 <div class="offer-content">
                     <span class="offer-tag">عرض الويكند</span>
                     <h3>ويكند الاستجمام العائلي</h3>
-                    <p style="color: #333; margin: 15px 0;">ليلتين شاملة الإفطار والدخول للسبا لجميع أفراد العائلة.</p>
+                    <p>ليلتين شاملة الإفطار والدخول للسبا لجميع أفراد العائلة.</p>
                     <p style="font-size: 1.5rem;">299$ فقط</p>
                     <button class="btn-gold" onclick="openPayment('ويكند الاستجمام', 299)">احجز العرض الآن</button>
                 </div>
@@ -473,19 +549,19 @@
                 <div class="offer-content">
                     <span class="offer-tag">خصم 30%</span>
                     <h3>باقة الأعمال الذكية</h3>
-                    <p style="color: #333; margin: 15px 0;">إقامة هادئة مع خدمة إنترنت فائق السرعة واستخدام قاعات الاجتماعات.</p>
-                    <p style="font-size: 1.5rem;">1200$ <small style="color:#999; font-size:1rem;">أسبوع كامل</small></p>
+                    <p>إقامة هادئة مع خدمة إنترنت فائق السرعة واستخدام قاعات الاجتماعات.</p>
+                    <p style="font-size: 1.5rem;">1200$</p>
                     <button class="btn-gold" onclick="openPayment('باقة الأعمال', 1200)">احجز العرض الآن</button>
                 </div>
             </div>
 
             <div class="offer-card">
-                <img src="https://images.unsplash.com/photo-1551882547-ff43c63efe8c?w=500" class="offer-img">
+                <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800" class="offer-img" alt="جناح عائلي فاخر">
                 <div class="offer-content">
-                    <span class="offer-tag">عرض الصيف</span>
+                    <span class="offer-tag">عائلي مميز</span>
                     <h3>مغامرة العائلة الكبيرة</h3>
-                    <p style="color: #333; margin: 15px 0;">جناح عائلي واسع مع تذاكر دخول للمدينة الترفيهية المجاورة.</p>
-                    <p style="font-size: 1.5rem;">550$ / ليلة</p>
+                    <p style="color: #333; margin-bottom: 10px;">استمتع بجناح عائلي واسع مع إفطار متكامل وأنشطة ترفيهية للأطفال.</p>
+                    <p style="font-size: 1.5rem; color: var(--gold); font-weight: 900;">550$ <small style="font-size: 0.9rem; color: #777;">/ ليلة</small></p>
                     <button class="btn-gold" onclick="openPayment('مغامرة العائلة', 550)">احجز العرض الآن</button>
                 </div>
             </div>
@@ -494,10 +570,9 @@
                 <img src="https://images.unsplash.com/photo-1445019980597-93fa8acb246c?w=500" class="offer-img">
                 <div class="offer-content">
                     <span class="offer-tag">احجز مبكراً</span>
-                    <h3>باقة الشتاء الدافئة</h3>
-                    <p style="color: #333; margin: 15px 0;">احجز قبل موعد وصولك بـ 30 يوم واحصل على نصف القيمة خصم فوري.</p>
-                    <p style="font-size: 1.5rem; color: var(--danger);">خصم 50%</p>
-                    <button class="btn-gold" onclick="showPage('contact')">استفسر عن الباقة</button>
+                    <h3>باقة الشتاء</h3>
+                    <p>خصم 50%</p>
+                    <button class="btn-gold" onclick="showPage('contact')">استفسر الآن</button>
                 </div>
             </div>
         </div>
@@ -516,101 +591,92 @@
                 <div class="contact-form">
                     <input type="text" placeholder="الاسم الكامل">
                     <input type="email" placeholder="البريد الإلكتروني">
-                    <textarea rows="5" placeholder="كيف يمكننا مساعدتك؟"></textarea>
-                    <button class="btn-gold" style="width:100%" onclick="alert('شكرًا لرسالتك، سنتصل بك قريبًا!')">إرسال الرسالة</button>
+                    <textarea rows="5" placeholder="رسالتك..."></textarea>
+                    <button class="btn-gold" style="width:100%" onclick="alert('شكرًا لرسالتك!')">إرسال</button>
                 </div>
             </div>
         </div>
     </div>
 
     <footer style="background: var(--black); color: var(--white); padding: 60px 8% 20px; margin-top: 50px; border-top: 4px solid var(--gold);">
-        <div class="footer-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px;">
             <div>
                 <h3 style="color: var(--gold); font-family: 'Playfair Display'; margin-bottom: 20px;">LOVING HOMES</h3>
-                <p style="color: #bbb; font-size: 0.9rem; line-height: 1.8;">نقدم لك تجربة سكنية استثنائية تجمع بين دفء المنزل وفخامة الفنادق العالمية بأعلى معايير الخصوصية.</p>
+                <p style="color: #bbb; font-size: 0.9rem; line-height: 1.8;">نقدم تجربة سكنية استثنائية تجمع بين دفء المنزل وفخامة الفنادق العالمية.</p>
             </div>
             <div>
-                <h4 style="margin-bottom: 20px;">تابعنا على السوشيال ميديا</h4>
-                <div class="social-links" style="display: flex; gap: 20px; font-size: 1.6rem;">
-                    <a href="https://instagram.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-instagram"></i></a>
-                    <a href="https://twitter.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-x-twitter"></i></a>
-                    <a href="https://facebook.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-facebook-f"></i></a>
-                    <a href="https://linkedin.com" target="_blank" style="color: var(--white); transition: 0.3s;"><i class="fab fa-linkedin-in"></i></a>
+                <h4 style="margin-bottom: 20px;">تابعنا</h4>
+                <div style="display: flex; gap: 20px; font-size: 1.6rem;">
+                    <a href="#" style="color: var(--white);"><i class="fab fa-instagram"></i></a>
+                    <a href="#" style="color: var(--white);"><i class="fab fa-x-twitter"></i></a>
+                    <a href="#" style="color: var(--white);"><i class="fab fa-facebook-f"></i></a>
                 </div>
             </div>
             <div>
-                <h4 style="margin-bottom: 20px;">روابط قانونية</h4>
+                <h4 style="margin-bottom: 20px;">القانونية</h4>
                 <ul style="list-style: none;">
-                    <li style="margin-bottom: 12px;"><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none; font-size: 0.95rem;">سياسة الخصوصية</a></li>
-                    <li><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none; font-size: 0.95rem;">شروط الحجز والاستخدام</a></li>
+                    <li style="margin-bottom: 12px;"><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none;">سياسة الخصوصية</a></li>
+                    <li><a href="javascript:void(0)" onclick="openPrivacy()" style="color: #bbb; text-decoration: none;">شروط الحجز</a></li>
                 </ul>
             </div>
         </div>
         <hr style="border: 0; border-top: 1px solid #333; margin-bottom: 25px;">
         <div style="text-align: center; color: #777; font-size: 0.9rem;">
-            <p>جميع الحقوق محفوظة &copy; 2025 لشركة <span style="color: var(--gold);">LOVING HOMES</span> الفندقية المحدودة</p>
+            <p>جميع الحقوق محفوظة &copy; 2025 لشركة <span style="color: var(--gold);">LOVING HOMES</span></p>
         </div>
     </footer>
 
     <div id="privacy-modal" class="modal-overlay">
         <div class="modal-card">
             <span onclick="closePrivacy()" style="position: absolute; top: 20px; left: 20px; cursor: pointer; font-size: 1.5rem;">&times;</span>
-            <h2 style="color: var(--gold); margin-bottom: 20px;">سياسة الخصوصية والأمان</h2>
-            <div style="color: #444; font-size: 0.95rem; line-height: 1.7; height: 300px; overflow-y: auto; padding-left: 10px;">
-                <p><strong>1. حماية البيانات:</strong> نحن نلتزم بحماية كافة بياناتك الشخصية والبنكية باستخدام أعلى معايير التشفير SSL العالمية.</p><br>
-                <p><strong>2. استخدام المعلومات:</strong> يتم استخدام بياناتك فقط لتحسين تجربة الحجز الخاصة بك وإرسال العروض الحصرية التي قد تهمك.</p><br>
-                <p><strong>3. الكوكيز:</strong> يستخدم موقعنا ملفات تعريف الارتباط لضمان سهولة التنقل وتذكر تفضيلاتك الشخصية عند العودة مرة أخرى.</p><br>
-                <p><strong>4. شروط الإلغاء:</strong> تختلف سياسة استرداد الأموال بناءً على نوع الباقة المختارة، يرجى مراجعة تفاصيل كل حجز قبل التأكيد.</p>
+            <h2 style="color: var(--gold); margin-bottom: 20px;">سياسة الخصوصية</h2>
+            <div style="color: #444; height: 300px; overflow-y: auto;">
+                <p>نحن نلتزم بحماية كافة بياناتك الشخصية والبنكية بأعلى معايير التشفير.</p><br>
+                <p>يتم استخدام البيانات لتحسين تجربة الحجز فقط.</p><br>
+                <p>لا يتم مشاركة معلوماتك مع أي جهات خارجية.</p>
             </div>
-            <button class="btn-gold" onclick="closePrivacy()" style="width: 100%; margin-top: 25px;">إغلاق وقبول الشروط</button>
+            <button class="btn-gold" onclick="closePrivacy()" style="width: 100%; margin-top: 25px;">إغلاق</button>
         </div>
     </div>
 
     <div id="payment-modal" class="modal-overlay">
         <div class="modal-card">
-            <h3 id="p-name" style="margin-bottom: 10px;"></h3>
-            <p id="p-price" style="color:var(--gold); font-weight:900; font-size: 1.5rem; margin-bottom: 20px;"></p>
-            <input type="text" placeholder="الاسم على البطاقة">
-            <input type="text" placeholder="رقم البطاقة الائتمانية (16 رقم)">
-            <div style="display:flex; gap:10px;">
-                <input type="text" placeholder="MM/YY">
-                <input type="text" placeholder="CVV">
-            </div>
-            <button class="btn-gold" style="width:100%; margin-top: 10px;" onclick="finish()">تأكيد عملية الدفع</button>
-            <button onclick="closePayment()" style="width:100%; background:none; border:none; margin-top:15px; cursor:pointer; color:#999;">إلغاء العملية والعودة</button>
+            <h3 id="p-name"></h3>
+            <p id="p-price" style="color:var(--gold); font-weight:900; font-size: 1.5rem; margin: 15px 0;"></p>
+            <input type="text" placeholder="رقم البطاقة">
+            <div style="display:flex; gap:10px;"><input type="text" placeholder="MM/YY"><input type="text" placeholder="CVV"></div>
+            <button class="btn-gold" style="width:100%" onclick="finish()">تأكيد الدفع</button>
+            <button onclick="closePayment()" style="width:100%; background:none; border:none; margin-top:15px; cursor:pointer; color:#999;">إلغاء</button>
         </div>
     </div>
 
     <script>
-        // التبديل بين الصفحات
+        // دالة إظهار وإخفاء القائمة في الجوال
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('menuOverlay');
+            menu.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // دالة التنقل بين الصفحات
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
 
-            // تحديث الروابط في النافبار
             document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
             const link = document.getElementById('lnk-' + id);
             if (link) link.classList.add('active');
 
-            // إغلاق قائمة الجوال عند اختيار صفحة
-            document.getElementById('navLinks').classList.remove('mobile-open');
-
-            // العودة لأعلى الصفحة
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
         }
 
-        // التحكم بقائمة الجوال
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('mobile-open');
-        }
-
-        // نافذة الدفع
         function openPayment(name, price) {
-            document.getElementById('p-name').innerText = "تأكيد حجز " + name;
-            document.getElementById('p-price').innerText = "إجمالي المبلغ: " + price + "$";
+            document.getElementById('p-name').innerText = "حجز " + name;
+            document.getElementById('p-price').innerText = price + "$";
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
@@ -619,11 +685,10 @@
         }
 
         function finish() {
-            alert("تم معالجة الدفع وحجز الجناح بنجاح! ننتظر زيارتك بكل شغف.");
+            alert("تم الحجز بنجاح!");
             closePayment();
         }
 
-        // نافذة الخصوصية
         function openPrivacy() {
             document.getElementById('privacy-modal').style.display = 'flex';
         }
@@ -632,7 +697,6 @@
             document.getElementById('privacy-modal').style.display = 'none';
         }
 
-        // إغلاق النوافذ عند الضغط خارجها
         window.onclick = function(e) {
             if (e.target.className === 'modal-overlay') {
                 closePayment();
